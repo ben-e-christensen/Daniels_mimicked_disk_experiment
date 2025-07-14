@@ -13,6 +13,7 @@ direction.on()
 
 def motor_control(state, run_time):
     start_time = time()
+    print("in motor control")
     
     if(run_time):
         while True:

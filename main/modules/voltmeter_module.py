@@ -1,14 +1,11 @@
 from daqhats import mcc118, OptionFlags, HatIDs
 import sys
 sys.path.append('/home/ben/Desktop/repos/daqhats/examples/python/mcc118')
-from daqhats_utils import select_hat_device, enum_mask_to_string, chan_list_to_mask
-from gui_module import update_voltage
+from daqhats_utils import select_hat_device, chan_list_to_mask
+from .gui_module import update_voltage
 import time
 
 from states import shared_state, state_lock
-
-
-
 
 READ_ALL_AVAILABLE = -1
 

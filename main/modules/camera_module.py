@@ -3,7 +3,7 @@ import numpy as np
 from picamera2 import Picamera2
 from PIL import Image
 import time
-from gui_module import update_angle, update_video
+from .gui_module import update_angle, update_video
 import os
 from states import shared_state, state_lock, motor_state
 from logger import log_data

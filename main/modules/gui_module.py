@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from motor_controls import adjust_speed, reverse_direction, start_motor, stop_motor
+from .motor_module import adjust_speed, reverse_direction, start_motor, stop_motor
 from helpers import calc_spin, update_tkinter_input_box
 
 from states import motor_state

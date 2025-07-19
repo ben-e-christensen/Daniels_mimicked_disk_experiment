@@ -1,9 +1,9 @@
 import threading
-from gui_module import run_gui
-from voltmeter_module import start_voltmeter_loop
-from camera_module import start_camera_loop
+from modules.gui_module import run_gui
+from modules.voltmeter_module import start_voltmeter_loop
+from modules.camera_module import start_camera_loop
 import atexit
-from html_generation import html_generator
+from helpers import html_generator
 from states import file_state
 
 def on_exit():

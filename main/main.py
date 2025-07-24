@@ -16,12 +16,17 @@ def on_exit():
 
 def main():
     try:
+        print("Starting voltmeter thread...")
         threading.Thread(target=start_voltmeter_loop, daemon=True).start()
+
+        print("Starting camera thread...")
         threading.Thread(target=start_camera_loop, daemon=True).start()
+
         run_gui()
     except KeyboardInterrupt:
         print("\nInterrupted! Cleaning up...")
         on_exit()
+
 
 if __name__ == '__main__':
     main()

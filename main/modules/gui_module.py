@@ -15,20 +15,21 @@ root.lift()
 root.attributes('-topmost', True)
 root.after(100, lambda: root.attributes('-topmost', False))
 
-
-
-
 # GUI state vars
 inc_val = tk.StringVar(value="0.1")
 checkbox_val = tk.IntVar()
-angle_var = tk.StringVar(value="Angle: --")
-voltage_var = tk.StringVar(value="Voltage: --")
-current_image = None  # To avoid GC of image
 
-# Widgets
-angle_label = tk.Label(root, textvariable=angle_var, font=("Helvetica", 14), fg="blue")
-voltage_label = tk.Label(root, textvariable=voltage_var, font=("Helvetica", 12), fg="green")
-video_label = tk.Label(root)
+# angle_var = tk.StringVar(value="Angle: --")
+# voltage_var = tk.StringVar(value="Voltage: --")
+# current_image = None  # To avoid GC of image
+
+# # Widgets
+# angle_label = tk.Label(root, textvariable=angle_var, font=("Helvetica", 14), fg="blue")
+# voltage_label = tk.Label(root, textvariable=voltage_var, font=("Helvetica", 12), fg="green")
+# video_label = tk.Label(root)
+
+angle_var = voltage_var = current_image = angle_label = voltage_label = video_label = None
+
 
 result_label = tk.Label(root, text=f"Delay (us): {motor_state['delay'] * 10e5:.0f} u_sec\nSteps: {int(motor_state['total_steps'])}\nTotal Time: {motor_state['delay'] * 2 * motor_state['total_steps']:.1f} sec")
 
@@ -57,20 +58,13 @@ update_tkinter_input_box(total_revs, motor_state['revs'])
 checkbox = tk.Checkbutton(root, text="Run motor until stopped", variable=checkbox_val, onvalue=1, offvalue=0)
 input_button = tk.Button(root, text="Get Input", command=handle_enter)
 
-""" # Pack them
-angle_label.pack(pady=5)
-voltage_label.pack(pady=5)
-video_label.pack(pady=5)
- """
-
 for w in [start_button, stop_button, reverse_button, speed_up_button, slow_down_button,
           inc_label, inc, freq_label, freq, revs_label, total_revs,
-          checkbox, input_button, result_label, angle_label, video_label, voltage_label]:
+          checkbox, input_button, result_label]:
     w.pack(pady=5)
 
 root.bind("<Return>", handle_enter)
 root.bind("<KP_Enter>", handle_enter)
-
 
 def update_angle(angle_text):
     angle_var.set(angle_text)
@@ -82,7 +76,31 @@ def update_video(pil_img):
     global current_image
     current_image = ImageTk.PhotoImage(pil_img)
     video_label.config(image=current_image)
-    video_label.image = current_image  # ⬅️ Add this line!
+    video_label.image = current_image 
+
+def create_second_window():
+    global angle_var, voltage_var, current_image, angle_label, voltage_label, video_label
+
+    # Create the second window
+    second_win = tk.Toplevel()
+    second_win.title("Camera & Angle Window")
+
+    # Vars
+    angle_var = tk.StringVar(value="Angle: --")
+    voltage_var = tk.StringVar(value="Voltage: --")
+    current_image = None  # Prevent GC
+
+    # Widgets
+    angle_label = tk.Label(second_win, textvariable=angle_var, font=("Helvetica", 14), fg="blue")
+    voltage_label = tk.Label(second_win, textvariable=voltage_var, font=("Helvetica", 12), fg="green")
+    video_label = tk.Label(second_win)
+
+    # Pack into the second window
+    angle_label.pack(pady=5)
+    voltage_label.pack(pady=5)
+    video_label.pack(pady=5)
+
 
 def run_gui():
+    root.after(100, create_second_window)
     root.mainloop()

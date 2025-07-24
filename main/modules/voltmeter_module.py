@@ -2,14 +2,13 @@ from daqhats import mcc118, OptionFlags, HatIDs
 import sys
 sys.path.append('/home/ben/Desktop/repos/daqhats/examples/python/mcc118')
 from daqhats_utils import select_hat_device, chan_list_to_mask
-from .gui_module import update_voltage
 import time
-
 from states import shared_state, state_lock
 
 READ_ALL_AVAILABLE = -1
 
 def start_voltmeter_loop():
+    print("IN LOOP!!!! --------------------------------------------------")
     channels = [0]
     channel_mask = chan_list_to_mask(channels)
     num_channels = len(channels)
@@ -17,8 +16,9 @@ def start_voltmeter_loop():
     samples_per_channel = 0
     options = OptionFlags.CONTINUOUS
 
-    address = select_hat_device(HatIDs.MCC_118)
+    address = 0
     hat = mcc118(address)
+
 
     hat.a_in_scan_start(channel_mask, samples_per_channel, scan_rate, options)
     timeout = 5.0
@@ -33,8 +33,9 @@ def start_voltmeter_loop():
         if samples_read_per_channel > 0:
             index = samples_read_per_channel * num_channels - num_channels
             val = read_result.data[index]
+            
             with state_lock:
                 shared_state["voltage"] = f"{val:.3f}"
-            update_voltage(f"Voltage: {val:.3f} V")
+            
 
         time.sleep(0.2)

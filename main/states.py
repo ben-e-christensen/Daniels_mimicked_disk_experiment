@@ -10,7 +10,6 @@ motor_state = {
 }
 
 shared_state = {
-    "angle": None,
     "voltage": None
 }
 
@@ -18,6 +17,12 @@ file_state = {
     "BASE_DIR": "/home/ben/Documents/disk_experiment",
     "CURRENT_DIR": "",
     "index": -1
+}
+
+blob_state = {
+    "area": None,
+    "center": [0,0],
+    "angle": None
 }
 
 state_lock = Lock()

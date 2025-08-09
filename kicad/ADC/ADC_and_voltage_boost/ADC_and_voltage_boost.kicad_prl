@@ -59,7 +59,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "electrometer.kicad_prl",
+    "filename": "ADC_and_voltage_boost.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {

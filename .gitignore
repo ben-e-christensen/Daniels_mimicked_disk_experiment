@@ -1,0 +1,8 @@
+electrometer_pcb/electrometer-backups/
+kicad/electrometer/electrometer-backups/
+*.zip
+*.drl
+*.gbr
+*.gbrjob
+~*.lck
+*.kicad_prl

@@ -5,196 +5,6 @@
 	(uuid "47c680de-131f-4b08-bf1d-2ba63acc97af")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:Screw_Terminal_01x02"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Screw_Terminal_01x02"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "screw terminal"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TerminalBlock*:*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Screw_Terminal_01x02_1_1"
-				(rectangle
-					(start -1.27 1.27)
-					(end 1.27 -3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.5334 0.3302) (xy 0.3302 -0.508)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.5334 -2.2098) (xy 0.3302 -3.048)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.3556 0.508) (xy 0.508 -0.3302)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.3556 -2.032) (xy 0.508 -2.8702)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 0 0)
-					(radius 0.635)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 0 -2.54)
-					(radius 0.635)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector:Screw_Terminal_01x04"
 			(pin_names
 				(offset 1.016)
@@ -2401,6 +2211,12 @@
 		(uuid "4d96315b-b801-4a05-996c-609d64331c90")
 	)
 	(junction
+		(at 88.9 118.11)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "90771c92-eda7-4cbe-afec-ab1bfe5cd788")
+	)
+	(junction
 		(at 166.37 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2496,6 +2312,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 118.11) (xy 88.9 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07250d92-5e7a-4cca-98d3-e076e10507d6")
+	)
+	(wire
+		(pts
 			(xy 161.29 87.63) (xy 191.77 87.63)
 		)
 		(stroke
@@ -2546,6 +2372,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 118.11) (xy 88.9 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d783d7b-275f-4b0f-8fe5-7b41f14177d7")
+	)
+	(wire
+		(pts
 			(xy 119.38 85.09) (xy 116.84 85.09)
 		)
 		(stroke
@@ -2563,6 +2399,26 @@
 			(type default)
 		)
 		(uuid "2236cf5b-8614-4c0a-bead-8264e78a4177")
+	)
+	(wire
+		(pts
+			(xy 83.82 115.57) (xy 92.71 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "23205cb3-b261-46eb-ac9e-2e269ac0476a")
+	)
+	(wire
+		(pts
+			(xy 83.82 120.65) (xy 125.73 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2589f171-33e7-452f-80c9-125c5f68f076")
 	)
 	(wire
 		(pts
@@ -2623,16 +2479,6 @@
 			(type default)
 		)
 		(uuid "3e68bdbd-ce89-4f04-99d7-3dfee37dcd26")
-	)
-	(wire
-		(pts
-			(xy 125.73 120.65) (xy 92.71 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3ea028aa-0cc1-40e7-99d1-9174e25c85fe")
 	)
 	(wire
 		(pts
@@ -2833,6 +2679,16 @@
 			(type default)
 		)
 		(uuid "8461c59e-7924-40e3-82c4-7fb4a13b8608")
+	)
+	(wire
+		(pts
+			(xy 83.82 113.03) (xy 88.9 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89fb880d-2af1-4184-9dfa-7181ccfa06f9")
 	)
 	(wire
 		(pts
@@ -3086,6 +2942,16 @@
 	)
 	(wire
 		(pts
+			(xy 92.71 118.11) (xy 92.71 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb879bcb-bec9-4a98-aa42-665fc17d51ee")
+	)
+	(wire
+		(pts
 			(xy 119.38 74.93) (xy 166.37 74.93)
 		)
 		(stroke
@@ -3093,6 +2959,16 @@
 			(type default)
 		)
 		(uuid "ee07ab37-1d1b-4ca2-9b3c-e77f6603b64d")
+	)
+	(wire
+		(pts
+			(xy 88.9 113.03) (xy 88.9 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef3d3ad9-403a-4c47-86ac-e40e3aa71bd8")
 	)
 	(wire
 		(pts
@@ -3347,7 +3223,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 182.5752 97.79 0)
 			(effects
 				(font
@@ -3613,7 +3489,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 119.6848 140.97 0)
 			(effects
 				(font
@@ -3714,6 +3590,80 @@
 			(project "ADC_and_voltage_boost"
 				(path "/47c680de-131f-4b08-bf1d-2ba63acc97af"
 					(reference "#PWR06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Screw_Terminal_01x04")
+		(at 78.74 118.11 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5d094406-f992-4fc2-b3f2-7ae884634ca2")
+		(property "Reference" "J2"
+			(at 78.74 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Screw_Terminal_01x04"
+			(at 78.74 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-4-2.54_1x04_P2.54mm_Horizontal"
+			(at 78.74 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 78.74 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 78.74 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "54e39ab4-45f0-4f02-88d3-3334c961c0f5")
+		)
+		(pin "2"
+			(uuid "f53f5b89-8555-4e63-98c0-b2ae18f5896e")
+		)
+		(pin "3"
+			(uuid "600ac174-9358-4304-9777-ca793f99e784")
+		)
+		(pin "4"
+			(uuid "2d12ea04-a563-4424-a1e6-9b56f72f46cc")
+		)
+		(instances
+			(project "ADC_and_voltage_boost"
+				(path "/47c680de-131f-4b08-bf1d-2ba63acc97af"
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -4208,7 +4158,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "4bf868ba-70af-4e56-8637-34e24ff36c61")
+			(uuid "4bf868ba-70af-4e56-8637-34e24ff36c62")
 		)
 		(instances
 			(project ""
@@ -4247,7 +4197,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 204.1652 92.71 0)
 			(effects
 				(font
@@ -4316,7 +4266,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 117.8052 92.71 0)
 			(effects
 				(font
@@ -4425,74 +4375,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Screw_Terminal_01x02")
-		(at 87.63 120.65 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b6b2c58f-e3ef-4b25-88d7-2b0df69335fc")
-		(property "Reference" "J4"
-			(at 87.63 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Screw_Terminal_01x02"
-			(at 87.63 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
-			(at 87.63 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 87.63 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 87.63 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "930f1004-5529-4a71-ae85-ca9f3b9ab7b8")
-		)
-		(pin "1"
-			(uuid "ae12dc2a-0578-4697-8933-279984e8e166")
-		)
-		(instances
-			(project "ADC_and_voltage_boost"
-				(path "/47c680de-131f-4b08-bf1d-2ba63acc97af"
-					(reference "J4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+5V")
 		(at 166.37 92.71 270)
 		(unit 1)
@@ -4554,6 +4436,71 @@
 			(project "ADC_and_voltage_boost"
 				(path "/47c680de-131f-4b08-bf1d-2ba63acc97af"
 					(reference "#PWR021")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 88.9 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c1298acc-7dea-4c52-9268-9d2cd0537d79")
+		(property "Reference" "#PWR012"
+			(at 88.9 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 88.9 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2dd3f6d2-66d5-4ad5-85fe-d1aabd8d1c68")
+		)
+		(instances
+			(project "ADC_and_voltage_boost"
+				(path "/47c680de-131f-4b08-bf1d-2ba63acc97af"
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -4652,7 +4599,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 195.2752 97.79 0)
 			(effects
 				(font
@@ -4927,7 +4874,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 122.2248 132.08 0)
 			(effects
 				(font

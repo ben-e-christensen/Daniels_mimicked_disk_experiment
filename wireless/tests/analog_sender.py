@@ -9,7 +9,7 @@ BAUD_RATE = 115200
 FREQ_HZ = 30  # Adjustable frequency (30 Hz = 1 reading every ~33 ms)
 
 def run_analog_sender():
-    interval = 1.0 / FREQ_HZ
+    interval = 60 / FREQ_HZ
     with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
         print(f"[AnalogSender] Sending at {FREQ_HZ} Hz...")
         while True:

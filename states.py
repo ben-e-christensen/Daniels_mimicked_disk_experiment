@@ -1,12 +1,23 @@
 # state.py
 from threading import Lock
+spr = 6400
+root_delay = 30 / spr
+
 
 motor_state = {
-    'delay': 0.0025,
-    'spr': 25600,
-    'revs': 3,
-    'total_steps': 25600 * 3,
+    'root_delay': root_delay,
+    'delay': root_delay,
+    'rpm': 1,
     'running': False,
+    'duration': 300,
+    'target_rpm': 35,
+}
+
+accelerator_state = {
+    'adjust_period': 0.1,
+    'increment': 0.0025,
+    'running': True,
+    'tolerance': 0.1
 }
 
 shared_state = {
@@ -26,3 +37,9 @@ blob_state = {
 }
 
 state_lock = Lock()
+
+location_state = {
+    'pin_count': 0,
+    'tracked_revs': 0,
+    'last_reading': False,
+}

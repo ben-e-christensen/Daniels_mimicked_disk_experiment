@@ -5,11 +5,11 @@ import atexit
 
 
 
-def init():
+def main():
     try:       
         print("Starting camera thread...")
         threading.Thread(target=start_camera_loop, daemon=True).start()
         run_gui()
 
-if __name__ == '__init__':
+if __name__ == '__main__':
     main()

@@ -1,16 +1,20 @@
 # state.py
 from threading import Lock
+from datetime import datetime
 spr = 6400
 root_delay = 30 / spr
 
+BASE_DIR ="//media/ben/Extreme SSD/disk_experiment/"
+now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S.") 
 
 motor_state = {
     'root_delay': root_delay,
     'delay': root_delay,
-    'rpm': 1,
+    'rpm': 3,
     'running': False,
     'duration': 300,
-    'target_rpm': 35,
+    'target_rpm': 3,
+    'at_max_speed': False
 }
 
 accelerator_state = {
@@ -25,8 +29,8 @@ shared_state = {
 }
 
 file_state = {
-    "BASE_DIR": "/home/ben/Documents/disk_experiment",
-    "CURRENT_DIR": "",
+
+    "CURRENT_DIR": BASE_DIR + now,
     "index": -1
 }
 
@@ -42,4 +46,5 @@ location_state = {
     'pin_count': 0,
     'tracked_revs': 0,
     'last_reading': False,
+    'angle_coordinate': 0
 }

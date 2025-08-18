@@ -34,18 +34,27 @@ def motor_control():
         return
     start_time = time.time()
     motor_state['running'] = True
+    accel = True if motor_state['target_rpm'] - motor_state['rpm'] > 0 else False
+
     while not stop_event.is_set():
         step.on()
         time.sleep(motor_state['delay'])
         step.off()
         time.sleep(motor_state['delay'])
+
         if abs(motor_state['target_rpm'] - motor_state['rpm']) <= accelerator_state['increment']:
             motor_state['rpm'] = motor_state['target_rpm']
             motor_state['delay'] = motor_state['root_delay'] / motor_state['rpm']
             break
         else:
-            motor_state['rpm'] += accelerator_state['increment']
+            if accel:
+                motor_state['rpm'] += accelerator_state['increment']
+            else:
+                motor_state['rpm'] -= accelerator_state['increment']
+
             motor_state['delay'] = motor_state['root_delay'] / motor_state['rpm']
+
+
     while not stop_event.is_set():
         step.on()
         time.sleep(motor_state['delay'])
@@ -67,6 +76,7 @@ def start_motor(start_button):
 def stop_motor(start_button):
     stop_event.set()
     close_location()
+    motor_state['rpm'] = 3
     start_button.config(state="normal")
 
 

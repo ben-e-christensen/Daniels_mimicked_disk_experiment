@@ -1,24 +1,14 @@
+# camera_feed.py
+import os, time
+from datetime import datetime
+import threading
+
 import cv2
 import numpy as np
 from picamera2 import Picamera2
-from PIL import Image
-import time
-from .gui_module import update_angle, update_video, update_voltage
-import os
-from states import shared_state, state_lock, motor_state, file_state, blob_state
-from logger import log_data
-from datetime import datetime
 
-# Directory to save captured frames
+from states import motor_state, file_state, blob_state  # keep using your states
 
-today = time.strftime("%Y-%m-%d_%H:%M", time.localtime())
-save_dir = f"{file_state['CURRENT_DIR']}/images"
-os.makedirs(save_dir, exist_ok=True)
-
-angle_history = []
-
-# ROI placeholder (will be set after user selects it)
-x = y = w = h = 0
 def apply_circular_mask(gray_img):
     h, w = gray_img.shape
     mask = np.zeros((h, w), dtype=np.uint8)
@@ -34,147 +24,97 @@ def smooth_angle(new_angle, history, N=10):
         history.pop(0)
     return sum(history) / len(history)
 
-
-def start_camera_loop():
-    global x, y, w, h
+def start_camera_loop(on_frame, on_angle, stop_event: threading.Event, *, save_frames=False):
+    """
+    Runs in its own thread. Captures frames, finds blob/angle, and calls:
+      - on_frame(frame_rgb) with an RGB numpy array (H,W,3)
+      - on_angle(angle_float_degrees)
+    No GUI calls inside this function.
+    """
+    # prepare save dir
+    save_dir = os.path.join(file_state["CURRENT_DIR"], "images")
+    os.makedirs(save_dir, exist_ok=True)
 
     picam2 = Picamera2()
     picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)}))
     picam2.start()
     time.sleep(1)
 
-    # ROI selection
+    # --- ROI selection (one-time) using OpenCV's selector ---
     frame = picam2.capture_array()
-    
     roi = cv2.selectROI("Select Top of Drum", frame, showCrosshair=True, fromCenter=False)
     cv2.destroyWindow("Select Top of Drum")
-    x, y, w, h = roi
+    x, y, w, h = roi if roi is not None else (0, 0, frame.shape[1], frame.shape[0])
 
-    frame_counter = -1  # Start from -1 to capture first frame as 0  
-    # while True:
-    #     frame = picam2.capture_array()
-    #     roi_frame = frame[y:y + h, x:x + w]
+    angle_history = []
+    frame_counter = -1
 
-    #     now = datetime.now()
-    #     formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.") + f"{now.microsecond // 10000:03d}"
+    try:
+        while not stop_event.is_set():
+            frame = picam2.capture_array()  # RGB888
+            roi_frame = frame[y:y + h, x:x + w]
+            now = datetime.now()
+            ts = now.strftime("%Y-%m-%d_%H-%M-%S.") + f"{now.microsecond // 10000:03d}"
 
-    #     img_name = f"frame_{frame_counter:04d} {formatted_time}.jpg"
-    #     filename = os.path.join(save_dir, img_name)
+            # Update counter only while motor runs
+            if motor_state.get("running"):
+                frame_counter += 1
 
-    #     if motor_state['running']:
-    #         frame_counter += 1
-    
+            raw_roi_path = os.path.join(save_dir, f"raw_roi_{frame_counter}_{ts}.jpg")
+            cv2.imwrite(raw_roi_path, cv2.cvtColor(roi_frame, cv2.COLOR_RGB2BGR))
+            # --- processing ---
+            gray = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2GRAY)
+            masked_gray, _ = apply_circular_mask(gray)
+            _, binary = cv2.threshold(masked_gray, 125, 75, cv2.THRESH_BINARY)
 
-    #     gray = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2GRAY)
-    #     blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    #     _, thresh = cv2.threshold(blur, 100, 255, cv2.THRESH_BINARY_INV)
-    #     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            roi_bgr = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2BGR)
+            contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    #     display_frame = roi_frame.copy()
-    #     largest = None
+            if contours:
+                largest = max(contours, key=cv2.contourArea)
+                area = float(cv2.contourArea(largest))
+                blob_state["area"] = area
+                M = cv2.moments(largest)
 
-    #     for cnt in contours:
-    #         if cv2.contourArea(cnt) > 1000 and len(cnt) > 5:
-    #             if largest is None or cv2.contourArea(cnt) > cv2.contourArea(largest):
-    #                 largest = cnt
+                cx = cy = None
+                if M["m00"] != 0:
+                    cx = int(M["m10"] / M["m00"])
+                    cy = int(M["m01"] / M["m00"])
+                    cv2.circle(roi_bgr, (cx, cy), 5, (255, 255, 255), -1)
 
-    #     if largest is not None:
-    #         ellipse = cv2.fitEllipse(largest)
-    #         cv2.ellipse(display_frame, ellipse, (0, 255, 0), 2)
-    #         angle = ellipse[2]
-    #         smoothed = smooth_angle(angle, angle_history)
+                cv2.drawContours(roi_bgr, [largest], -1, (0, 0, 255), 2)
 
-    #         with state_lock:
-    #             shared_state["angle"] = smoothed
-    #             angle_snapshot = shared_state["angle"]
-    #             voltage_snapshot = shared_state["voltage"]
+                if len(largest) >= 5:
+                    ellipse = cv2.fitEllipse(largest)
+                    cv2.ellipse(roi_bgr, ellipse, (255, 0, 255), 2)
+                    angle_raw = float(ellipse[2])
+                    angle_s = smooth_angle(angle_raw, angle_history, N=10)
 
-    #         update_angle(f"Angle: {smoothed:.1f} deg")
+                    blob_state["center"] = [cx, cy] if cx is not None else None
+                    blob_state["angle"] = angle_s
 
-    #         if frame_counter % 10 == 0:
-    #             # Log data every 10 frames
-    #             log_data(voltage=voltage_snapshot, angle=f"{angle_snapshot:.2f}", img=img_name)
-    #             cv2.imwrite(filename, frame)
-    #         elif frame_counter != -1: 
-    #             log_data(voltage=voltage_snapshot, angle=f"{angle_snapshot:.2f}")
+                    # notify GUI about angle
+                    try:
+                        on_angle(angle_s)
+                    except Exception:
+                        pass
 
+            # send frame to GUI (convert to RGB for Tk/PIL)
+            frame_rgb_ov = cv2.cvtColor(roi_bgr, cv2.COLOR_BGR2RGB)
+            try:
+                on_frame(frame_rgb_ov)
+            except Exception:
+                pass
 
-    #     # Display image
-    #     pil_img = Image.fromarray(display_frame)
-    #     update_video(pil_img)
+            # Optional save
+            if save_frames and motor_state.get("running") and frame_counter >= 0:
+                now = datetime.now()
+                formatted_time = now.strftime("%Y-%m-%d_%H-%M-%S.") + f"{now.microsecond // 10000:03d}"
+                img_name = f"frame_{frame_counter:04d}_{formatted_time}.jpg"
+                cv2.imwrite(os.path.join(save_dir, img_name), cv2.cvtColor(roi_frame, cv2.COLOR_RGB2BGR))
 
-    #     time.sleep(0.1)
-
-    while True:
-        frame = picam2.capture_array()
-        roi_frame = frame[y:y + h, x:x + w]
-
-        now = datetime.now()
-        formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.") + f"{now.microsecond // 10000:03d}"
-
-        img_name = f"frame_{frame_counter:04d} {formatted_time}.jpg"
-        filename = os.path.join(save_dir, img_name)
-
-        if motor_state['running']:
-            frame_counter += 1
-    
-    
-        # Convert to grayscale
-        gray = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2GRAY)
-
-        # Apply circular mask
-        masked_gray, _ = apply_circular_mask(gray)
-
-        # Threshold to binary
-        _, binary = cv2.threshold(masked_gray, 125, 75, cv2.THRESH_BINARY)
-
-        # Find contours
-        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Convert to BGR for display
-        roi_bgr = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2BGR)
-
-        if contours:
-            largest = max(contours, key=cv2.contourArea)
-            blob_state['area'] = area = cv2.contourArea(largest)
-            M = cv2.moments(largest)
-
-            if M["m00"] != 0:
-                cx = int(M["m10"] / M["m00"])
-                cy = int(M["m01"] / M["m00"])
-                cv2.circle(roi_bgr, (cx, cy), 5, (255, 255, 255), -1)
-
-            cv2.drawContours(roi_bgr, [largest], -1, (0, 0, 255), 2)
-
-            if len(largest) >= 5:
-                ellipse = cv2.fitEllipse(largest)
-                cv2.ellipse(roi_bgr, ellipse, (255, 0, 255), 2)
-                blob_state['center'] = [cx, cy]
-                blob_state['angle'] = ellipse[2]
-                #print(f"Area: {area:.2f}, Center: ({cx}, {cy}), Angle: {ellipse[2]:.2f}°")
-
-        # Display result
-        cv2.imshow("Blob Detection", roi_bgr)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-        with state_lock:
-            
-            voltage_snapshot = shared_state["voltage"]
-
-        # print(shared_state["voltage"])
-        
-        update_angle(f"Angle: {blob_state['angle']:.1f} deg")
-
-        if frame_counter % 10 == 0:
-            # Log data every 10 frames
-            log_data(voltage=voltage_snapshot, angle=f"{blob_state['angle']:.2f}", img=img_name)
-            cv2.imwrite(filename, frame)
-        elif frame_counter != -1: 
-            update_voltage(f"Voltage: {voltage_snapshot} V")
-            log_data(voltage=voltage_snapshot, angle=f"{blob_state['angle']:.2f}")
-
-        time.sleep(0.1)
-    picam2.stop()
-    cv2.destroyAllWindows()
+    finally:
+        try:
+            picam2.stop()
+        except Exception:
+            pass

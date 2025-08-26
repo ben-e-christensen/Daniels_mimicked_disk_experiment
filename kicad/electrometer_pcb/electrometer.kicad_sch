@@ -1701,7 +1701,7 @@
 				)
 			)
 		)
-		(property "Value" "1e-03"
+		(property "Value" "100n"
 			(at 180.34 83.82 90)
 			(effects
 				(font
@@ -1834,7 +1834,7 @@
 				)
 			)
 		)
-		(property "Value" "1e+09"
+		(property "Value" "5M"
 			(at 109.22 71.12 90)
 			(effects
 				(font
@@ -1901,7 +1901,7 @@
 				)
 			)
 		)
-		(property "Value" "1e-03"
+		(property "Value" "100n"
 			(at 168.91 83.82 90)
 			(effects
 				(font
@@ -2195,7 +2195,7 @@
 				)
 			)
 		)
-		(property "Value" "1e+04"
+		(property "Value" "1k"
 			(at 132.08 96.52 90)
 			(effects
 				(font
@@ -2348,7 +2348,7 @@
 				)
 			)
 		)
-		(property "Value" "1e-03"
+		(property "Value" "1n"
 			(at 109.22 81.28 90)
 			(effects
 				(font
@@ -2415,7 +2415,7 @@
 				)
 			)
 		)
-		(property "Value" "1e+06"
+		(property "Value" "1k"
 			(at 147.32 83.82 90)
 			(effects
 				(font

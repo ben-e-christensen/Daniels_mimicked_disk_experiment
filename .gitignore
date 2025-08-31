@@ -1,5 +1,6 @@
 electrometer_pcb/electrometer-backups/
 kicad/electrometer/electrometer-backups/
+micropython-tools
 *.zip
 *.drl
 *.gbr

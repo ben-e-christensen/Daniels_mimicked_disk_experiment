@@ -56,11 +56,11 @@ for w in [start_button, stop_button, find_button, duration_label, duration, rpm_
 # def update_angle(angle_text):
 #     angle_var.set(angle_text)
 
-# def update_video(pil_img):
-#     global current_image
-#     current_image = ImageTk.PhotoImage(pil_img)
-    #video_label.config(image=current_image)
-    #video_label.image = current_image 
+def update_video(pil_img):
+    global current_image
+    current_image = ImageTk.PhotoImage(pil_img)
+    video_label.config(image=current_image)
+    video_label.image = current_image 
 
 
 def run_gui():

@@ -25,7 +25,7 @@ shared_state = {
 }
 
 file_state = {
-    "BASE_DIR": "/home/ben/Documents/disk_experiment",
+    "BASE_DIR": "/media/ben/Extreme SSD/disk_experiment",
     "CURRENT_DIR": "",
     "index": -1
 }

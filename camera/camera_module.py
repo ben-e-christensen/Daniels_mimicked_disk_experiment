@@ -3,9 +3,9 @@ import numpy as np
 from picamera2 import Picamera2
 from PIL import Image
 import time
-#from gui.gui_module import update_angle, update_video
 import os
 from states import shared_state, state_lock, motor_state, file_state, blob_state
+from gui.gui_module import video_queue
 
 from datetime import datetime
 
@@ -62,14 +62,13 @@ def start_camera_loop(stop_event):
             roi_frame = frame[y:y + h, x:x + w]
 
             now = datetime.now()
-            formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.") + f"{now.microsecond // 10000:03d}"
+            formatted_time = now.strftime("%Y-%m-%d_%H-%M-%S") + f"_{now.microsecond // 10000:03d}"
 
             img_name = f"frame_{frame_counter:04d} {formatted_time}.jpg"
             filename = os.path.join(save_dir, img_name)
 
             if motor_state['running']:
                 frame_counter += 1
-        
         
             # Convert to grayscale
             gray = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2GRAY)
@@ -105,27 +104,18 @@ def start_camera_loop(stop_event):
                     blob_state['angle'] = ellipse[2]
                     #print(f"Area: {area:.2f}, Center: ({cx}, {cy}), Angle: {ellipse[2]:.2f}°")
 
-            # Display result
-            cv2.imshow("Blob Detection", roi_bgr)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # Convert the NumPy array to a PIL Image and put it in the queue
+            pil_img = Image.fromarray(cv2.cvtColor(roi_bgr, cv2.COLOR_BGR2RGB))
+            video_queue.put(pil_img)
+            
+            # Save all frames to the images folder
+            cv2.imwrite(filename, frame)
 
             with state_lock:
                 
                 voltage_snapshot = shared_state["voltage"]
 
-            # print(shared_state["voltage"])
-            
-            #update_angle(f"Angle: {blob_state['angle']:.1f} deg")
 
-            # if frame_counter % 10 == 0:
-            #     # Log data every 10 frames
-            #     log_data(voltage=voltage_snapshot, angle=f"{blob_state['angle']:.2f}", img=img_name)
-            #     cv2.imwrite(filename, frame)
-            # elif frame_counter != -1: 
-
-            #     log_data(voltage=voltage_snapshot, angle=f"{blob_state['angle']:.2f}")
 
             time.sleep(0.1)
     picam2.stop()

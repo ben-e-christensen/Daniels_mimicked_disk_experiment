@@ -1,5 +1,5 @@
 import threading, asyncio, time
-from BLE.test_client.ble_plotter import run_ble_in_thread, stop_event, data_queue_a0, data_queue_a1
+from BLE.client.ble_plotter import run_ble_in_thread, stop_event, data_queue_a0, data_queue_a1
 from gui.gui_module import data_queue_a0, data_queue_a1
 
 def _runner(csv_path):

@@ -3,8 +3,8 @@ import threading, time, os, signal, sys, atexit
 from states import file_state
 from gui.gui_module import run_gui, update_plot
 from camera.camera_module import start_camera_loop
-from BLE.test_client.ble_thread import start_ble_in_thread
-from BLE.test_client.ble_plotter import stop_event
+from BLE.client.ble_thread import start_ble_in_thread
+from BLE.client.ble_plotter import stop_event
 
 today = time.strftime("%Y-%m-%d_%H_%M", time.localtime())
 save_dir = f"{file_state['BASE_DIR']}/{today}"

@@ -13,7 +13,7 @@ from queue import Queue
 import cv2
 
 # Import the shared queues and stop_event from the BLE module
-from BLE.test_client.ble_plotter import data_queue_a0, data_queue_a1, stop_event
+from BLE.client.ble_plotter import data_queue_a0, data_queue_a1, stop_event
 
 from states import motor_state
 

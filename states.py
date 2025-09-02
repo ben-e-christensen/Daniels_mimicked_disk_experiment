@@ -10,7 +10,7 @@ motor_state = {
     'rpm': 1,
     'running': False,
     'duration': 300,
-    'target_rpm': 35,
+    'target_rpm': 1,
 }
 
 accelerator_state = {
@@ -25,7 +25,7 @@ shared_state = {
 }
 
 file_state = {
-    "BASE_DIR": "/media/ben/Extreme SSD/disk_experiment",
+    "BASE_DIR": "/media/ben/A0B4-33AC/disk_experiment",
     "CURRENT_DIR": "",
     "index": -1
 }

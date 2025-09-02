@@ -4,9 +4,9 @@ from picamera2 import Picamera2
 from PIL import Image
 import time
 import os
-from states import shared_state, state_lock, motor_state, file_state, blob_state
+from states import shared_state, state_lock, location_state, file_state, blob_state
 from gui.gui_module import video_queue
-
+from gpiozero import InputDevice
 from datetime import datetime
 
 # Directory to save captured frames
@@ -19,6 +19,7 @@ save_dir = f"{file_state['CURRENT_DIR']}/images"
 os.makedirs(save_dir, exist_ok=True)
 
 angle_history = []
+running = InputDevice(16)
 
 # ROI placeholder (will be set after user selects it)
 x = y = w = h = 0
@@ -67,8 +68,7 @@ def start_camera_loop(stop_event):
             img_name = f"frame_{frame_counter:04d} {formatted_time}.jpg"
             filename = os.path.join(save_dir, img_name)
 
-            if motor_state['running']:
-                frame_counter += 1
+
         
             # Convert to grayscale
             gray = cv2.cvtColor(roi_frame, cv2.COLOR_RGB2GRAY)
@@ -109,11 +109,12 @@ def start_camera_loop(stop_event):
             video_queue.put(pil_img)
             
             # Save all frames to the images folder
-            cv2.imwrite(filename, frame)
-
-            with state_lock:
+            if running.is_active:
                 
-                voltage_snapshot = shared_state["voltage"]
+                frame_counter += 1
+                cv2.imwrite(filename, frame)
+
+
 
 
 

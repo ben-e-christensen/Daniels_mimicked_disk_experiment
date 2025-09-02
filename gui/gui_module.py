@@ -27,7 +27,7 @@ buffer_size = 500  # Number of data points to display
 video_queue = Queue()
 video_label = None
 tk_img = None # A global reference to prevent garbage collection
-DISPLAY_W, DISPLAY_H = 480, 480
+DISPLAY_W, DISPLAY_H = 480, 320
 
 # --- Matplotlib and Tkinter Setup ---
 fig, ax = plt.subplots(1, 2, figsize=(10, 5))

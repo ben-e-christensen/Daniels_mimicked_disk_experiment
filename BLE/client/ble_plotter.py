@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from queue import Queue
 from bleak import BleakClient, BleakError, BleakScanner
+from gpiozero import InputDevice
 
 # --- CONFIGURATION ---
 DEFAULT_NAME = "ESP32-Analog-100Hz"
@@ -21,6 +22,8 @@ data_queue_a1 = Queue()
 stop_event = threading.Event()
 csv_writer = None
 csv_file = None
+running = InputDevice(13)
+# if running.is_active:
 
 # --- ASYNCHRONOUS BLE LOGIC ---
 async def find_device(name: str | None, address: str | None, timeout: float = 8.0):
@@ -75,13 +78,13 @@ async def ble_receiver_task(csv_path: str | None):
                             data_queue_a0.put(val)
                         for val in a1_vals:
                             data_queue_a1.put(val)
-                        
-                        if csv_writer:
-                            csv_writer.writerow([
-                                datetime.utcfromtimestamp(now).isoformat(),
-                                f"{now:.6f}",
-                                *a0_vals, *a1_vals
-                            ])
+                        if running.is_active:
+                            if csv_writer:
+                                csv_writer.writerow([
+                                    datetime.utcfromtimestamp(now).isoformat(),
+                                    f"{now:.6f}",
+                                    *a0_vals, *a1_vals
+                                ])
                     except struct.error:
                         print(f"[BLE] Bad packet length: {len(data)}")
 

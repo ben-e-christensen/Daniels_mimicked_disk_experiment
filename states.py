@@ -11,6 +11,8 @@ motor_state = {
     'running': False,
     'duration': 300,
     'target_rpm': 1,
+    'total_steps': 25600 * 3,
+    'revs': 3,
 }
 
 accelerator_state = {
@@ -39,6 +41,7 @@ blob_state = {
 state_lock = Lock()
 
 location_state = {
+    'running': False,
     'pin_count': 0,
     'tracked_revs': 0,
     'last_reading': False,

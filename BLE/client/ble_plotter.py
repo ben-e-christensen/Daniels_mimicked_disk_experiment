@@ -1,13 +1,9 @@
-import asyncio
-import threading
-import time
-import struct
-import csv
-import os
+import asyncio, threading, time, struct, csv, os, math
 from datetime import datetime
 from queue import Queue
 from bleak import BleakClient, BleakError, BleakScanner
 from gpiozero import InputDevice
+from states import blob_state, location_state, motor_info_state
 
 # --- CONFIGURATION ---
 DEFAULT_NAME = "ESP32-Analog-100Hz"
@@ -24,6 +20,10 @@ csv_writer = None
 csv_file = None
 running = InputDevice(13)
 # if running.is_active:
+
+running_time = 0
+
+theoretical_angle = None
 
 # --- ASYNCHRONOUS BLE LOGIC ---
 async def find_device(name: str | None, address: str | None, timeout: float = 8.0):
@@ -50,7 +50,9 @@ async def ble_receiver_task(csv_path: str | None):
         csv_writer.writerow([
             "iso_time", "epoch_s",
             "a0_0", "a0_1", "a0_2", "a0_3", "a0_4",
-            "a1_0", "a1_1", "a1_2", "a1_3", "a1_4"
+            "a1_0", "a1_1", "a1_2", "a1_3", "a1_4",
+            "angle_of_particles", "area_of_particles",
+            "approximate_angle_of_a0", "approximate_angle_of_a1"
         ])
         print(f"[BLE] Logging to {csv_path}")
     
@@ -78,12 +80,22 @@ async def ble_receiver_task(csv_path: str | None):
                             data_queue_a0.put(val)
                         for val in a1_vals:
                             data_queue_a1.put(val)
-                        if running.is_active:
+                        if running.is_active and location_state['flag']:
+                            global running_time
+                            if running_time == 0:
+                                running_time = time.time()
                             if csv_writer:
+                                elapsed = time.time() - running_time
+                                
+                                if elapsed > 0: # Avoid division by zero
+                                    steps = elapsed / (motor_info_state['delay'] * 2) 
+                                    a0_angle = math.floor(steps) * motor_info_state['angles_per_step']
                                 csv_writer.writerow([
                                     datetime.utcfromtimestamp(now).isoformat(),
                                     f"{now:.6f}",
-                                    *a0_vals, *a1_vals
+                                    *a0_vals, *a1_vals, 
+                                    blob_state['angle'], blob_state['area'],
+                                    a0_angle, a0_angle + 180
                                 ])
                     except struct.error:
                         print(f"[BLE] Bad packet length: {len(data)}")

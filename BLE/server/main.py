@@ -20,7 +20,10 @@ _PROP_NOTIFY = const(0x10)
 
 # ===== Stream timing =====
 NAME       = "ESP32-Analog-100Hz"
-N          = const(5)         # 5 samples per channel -> 10 u16 total
+# --- MODIFICATION ---
+# Reduced samples per packet to make room for a timestamp.
+N          = const(4)         # 4 samples per channel -> 8 u16 total
+# --- END MODIFICATION ---
 GAP_US     = const(2000)      # 2 ms between samples -> 500 Hz
 PERIOD_US  = const(10000)     # 10 ms per packet -> ~100 Hz
 
@@ -43,7 +46,8 @@ class App:
             # Some ports default to 12-bit; okay to ignore if not present
             pass
 
-        self._buf = bytearray(20)  # 10 x u16
+        # Buffer now holds 1x uint32 (time) + 8x uint16 (ADC) = 20 bytes
+        self._buf = bytearray(20)
         # --- BLE setup ---
         self.ble = bluetooth.BLE()
         self.ble.active(True)
@@ -76,11 +80,11 @@ class App:
         while True:
             t0 = time.ticks_us()
             try:
-                # --- sample A3/A4: 5 samples each with 2 ms gap ---
+                # --- MODIFICATION: Capture start time and change packet structure ---
+                t_start_burst = time.ticks_us() # Timestamp for the burst
                 a3 = [0]*N
                 a4 = [0]*N
                 for i in range(N):
-                    # read_u16() is 0..65535 → scale to ~12-bit by >>4
                     a3[i] = (self.adc3.read_u16() >> 4)
                     a4[i] = (self.adc4.read_u16() >> 4)
                     if i < N - 1:
@@ -88,9 +92,10 @@ class App:
                         while time.ticks_diff(target, time.ticks_us()) > 0:
                             pass
 
-                # Pack as 10 x u16 LE: A3[5], then A4[5]
+                # New packet: 1x u32 (time), 8x u16 (ADC readings)
                 vals = a3 + a4
-                struct.pack_into("<10H", self._buf, 0, *vals)
+                struct.pack_into("<L8H", self._buf, 0, t_start_burst, *vals)
+                # --- END MODIFICATION ---
 
                 # Update GATT value and notify
                 self.ble.gatts_write(self._chr_handle, self._buf)

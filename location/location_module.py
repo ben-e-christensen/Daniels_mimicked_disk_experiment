@@ -16,6 +16,7 @@ def locator():
                 location_state['pin_count'] += 1
                 if location_state['flag'] == False:
                     location_state['flag'] = True
+                    print('Recording...')
                 print('pin found!')
             elif not location_state['last_reading']:
                 location_state['tracked_revs'] += 1

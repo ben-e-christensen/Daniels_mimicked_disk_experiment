@@ -1,4 +1,4 @@
-26375400760768407
+26377158194117698
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -104026,6 +104026,13 @@ Varistor VF
 0
 2
 2
+XIAO_DIP
+XIAO-ESP32C3-DIP
+
+
+0
+30
+16
 max1032
 SOP65P640X110-24N
 
